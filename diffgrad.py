@@ -71,14 +71,12 @@ class DiffGrad(optimizer_v2.OptimizerV2):
         m_scaled_g_values = grad * coefficients['one_minus_beta_1_t']
         m_t = state_ops.assign(m, m * coefficients['beta_1_t'] + m_scaled_g_values,
                                use_locking=self._use_locking)
-        m_t = m_t / (1.0 - coefficients['beta_1_power'])
 
         # v_t = beta2 * v + (1 - beta2) * (g_t * g_t)
         v = self.get_slot(var, 'v')
         v_scaled_g_values = (grad * grad) * coefficients['one_minus_beta_2_t']
         v_t = state_ops.assign(v, v * coefficients['beta_2_t'] + v_scaled_g_values,
                                use_locking=self._use_locking)
-        v_t = v_t / (1.0 - coefficients['beta_2_power'])
 
         # diffgrad
         prev_g = self.get_slot(var, 'prev_g')
